@@ -6,6 +6,18 @@
 
 namespace Hazel {
 
+	const TexCoords Texture2D::DefaultTexCoords = Texture2D::CreateTexCoords({ 0.0f, 0.0f }, { 1.0f, 1.0f });
+
+	TexCoords Texture2D::CreateTexCoords(const glm::vec2& min, const glm::vec2& max)
+	{
+		return {
+			glm::vec2(min.x, min.y),
+			glm::vec2(max.x, min.y),
+			glm::vec2(max.x, max.y),
+			glm::vec2(min.x, max.y)
+		};
+	}
+
 	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
 	{
 		switch (Renderer::GetAPI())

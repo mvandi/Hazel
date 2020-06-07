@@ -1,6 +1,9 @@
 #pragma once
 
+#include <array>
 #include <string>
+
+#include <glm/glm.hpp>
 
 #include "Hazel/Core/Base.h"
 
@@ -22,11 +25,19 @@ namespace Hazel {
 		virtual bool operator==(const Texture& other) const = 0;
 	};
 
+	using TexCoords = std::array<glm::vec2, 4>;
+
 	class Texture2D : public Texture
 	{
 	public:
+		virtual const TexCoords& GetTexCoords() const { return DefaultTexCoords; }
+		
+		static TexCoords CreateTexCoords(const glm::vec2& min, const glm::vec2& max);
+
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ref<Texture2D> Create(const std::string& path);
+	public:
+		static const TexCoords DefaultTexCoords;
 	};
 
 }

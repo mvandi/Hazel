@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Hazel/Renderer/SubTexture2D.h"
+
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 {
@@ -14,6 +16,11 @@ void Sandbox2D::OnAttach()
 	HZ_PROFILE_FUNCTION();
 
 	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
+
+	m_SpriteSheet = Hazel::SpriteSheet::Create("assets/textures/RPGpack_sheet_2X.png", {128.0f, 128.0f});
+	m_TextureStairs = m_SpriteSheet->Get(7, 6);
+	m_TextureBarrel = m_SpriteSheet->Get(8, 2);
+	m_TextureTree = m_SpriteSheet->Get(2, 1, { 1, 2 });
 }
 
 void Sandbox2D::OnDetach()
@@ -41,6 +48,7 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 		rotation += ts * 50.0f;
 
 		HZ_PROFILE_SCOPE("Renderer Draw");
+#if 0
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		Hazel::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.8f, 0.2f, 0.3f, 1.0f });
 		Hazel::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
@@ -58,6 +66,12 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 				Hazel::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
 			}
 		}
+		Hazel::Renderer2D::EndScene();
+#endif
+		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Hazel::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 1.0f, 2.0f }, m_TextureTree);
+		Hazel::Renderer2D::DrawQuad({  0.0f, 0.0f }, { 1.0f, 1.0f }, m_TextureStairs);
+		Hazel::Renderer2D::DrawQuad({  1.0f, 0.0f }, { 1.0f, 1.0f }, m_TextureBarrel);
 		Hazel::Renderer2D::EndScene();
 	}
 }
