@@ -56,7 +56,7 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 		Hazel::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_CheckerboardTexture, 10.0f);
 		Hazel::Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, m_CheckerboardTexture, 20.0f);
 		Hazel::Renderer2D::EndScene();
-
+#endif
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		for (float y = -5.0f; y < 5.0f; y += 0.5f)
 		{
@@ -67,11 +67,11 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 			}
 		}
 		Hazel::Renderer2D::EndScene();
-#endif
+
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Hazel::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 1.0f, 2.0f }, m_TextureTree);
-		Hazel::Renderer2D::DrawQuad({  0.0f, 0.0f }, { 1.0f, 1.0f }, m_TextureStairs);
-		Hazel::Renderer2D::DrawQuad({  1.0f, 0.0f }, { 1.0f, 1.0f }, m_TextureBarrel);
+		Hazel::Renderer2D::DrawQuad({ -1.0f, 0.0f, 0.1f }, { 1.0f, 2.0f }, m_TextureTree);
+		Hazel::Renderer2D::DrawQuad({  0.0f, 0.0f, 0.1f }, { 1.0f, 1.0f }, m_TextureStairs);
+		Hazel::Renderer2D::DrawQuad({  1.0f, 0.0f, 0.1f }, { 1.0f, 1.0f }, m_TextureBarrel);
 		Hazel::Renderer2D::EndScene();
 	}
 }

@@ -31,6 +31,11 @@ namespace Hazel {
 		{
 			s_RendererAPI->DrawIndexed(vertexArray, count);
 		}
+
+		static uint32_t GetMaxTextureSlotCount()
+		{
+			return s_RendererAPI->GetMaxTextureSlotCount();
+		}
 	private:
 		static Scope<RendererAPI> s_RendererAPI;
 	};

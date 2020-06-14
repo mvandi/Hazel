@@ -23,7 +23,7 @@ namespace Hazel {
 		static const uint32_t MaxQuads = 20000;
 		static const uint32_t MaxVertices = MaxQuads * 4;
 		static const uint32_t MaxIndices = MaxQuads * 6;
-		static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
+		static uint32_t MaxTextureSlots; // TODO: RenderCaps
 		static const float UnassignedTextureSlot;
 
 		Ref<VertexArray> QuadVertexArray;
@@ -35,7 +35,7 @@ namespace Hazel {
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
 
-		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+		Ref<Texture2D>* TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
 
 		glm::vec4 QuadVertexPositions[4];
@@ -44,6 +44,7 @@ namespace Hazel {
 	};
 
 	const float Renderer2DData::UnassignedTextureSlot = -1.0f;
+	uint32_t Renderer2DData::MaxTextureSlots = 0;
 
 	static Renderer2DData s_Data;
 
@@ -89,7 +90,8 @@ namespace Hazel {
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
-		int32_t samplers[s_Data.MaxTextureSlots];
+		Renderer2DData::MaxTextureSlots = RenderCommand::GetMaxTextureSlotCount();
+		int32_t* samplers = new int32_t[s_Data.MaxTextureSlots];
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
 
@@ -98,6 +100,7 @@ namespace Hazel {
 		s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
 		// Set all texture slots to 0
+		s_Data.TextureSlots = new Ref<Texture2D>[Renderer2DData::MaxTextureSlots];
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
 		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
@@ -111,6 +114,7 @@ namespace Hazel {
 		HZ_PROFILE_FUNCTION();
 
 		delete[] s_Data.QuadVertexBufferBase;
+		delete[] s_Data.TextureSlots;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)

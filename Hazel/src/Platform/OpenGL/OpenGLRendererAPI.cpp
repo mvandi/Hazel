@@ -65,4 +65,11 @@ namespace Hazel {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	uint32_t OpenGLRendererAPI::GetMaxTextureSlotCount() const
+	{
+		int textureSlots;
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &textureSlots);
+		return textureSlots;
+	}
+
 }
